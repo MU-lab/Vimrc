@@ -1,0 +1,37 @@
+colorscheme molokai
+"colorscheme morning
+"colorscheme default
+"colorscheme hybrid
+"colorscheme torte
+"colorscheme jellybeans
+"colorscheme twilight
+"colorscheme lucius
+"colorscheme railscasts
+"colorscheme solarized
+"colorscheme Wombat
+"colorscheme rdark
+
+
+"noremap <silent> <C-t>:tablast <bar> tabnew<CR>
+" tab-t 新しいタブを一番右に作る
+"noremap <silent> <C-w> :tabclose<CR>
+" tab-w タブを閉じる
+noremap <silent> <C-tab> :tabnext<CR>
+" ctrl-tab 次のタブ
+noremap <silent> <C-S-tab> :tabprevious<CR>
+" shift-ctrl-tab 前のタブ
+
+if has('win32')
+        set guifont=MS_Gothic:h12:cSHIFTJIS
+elseif has('unix')
+        set guifont=DejaVu\ Sans\ Mono\ 12
+endif
+
+" ウインドウの幅
+" set columns=
+" ウインドウの高さ
+" set lines=
+" コマンドラインの高さ(GUI使用時)
+set cmdheight=2
+" gvim起動時全画面
+au GUIEnter * simalt ~x
