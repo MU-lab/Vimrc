@@ -1,7 +1,7 @@
-colorscheme molokai
+" colorscheme molokai
 "colorscheme morning
 "colorscheme default
-"colorscheme hybrid
+colorscheme hybrid
 "colorscheme torte
 "colorscheme jellybeans
 "colorscheme twilight
@@ -11,15 +11,21 @@ colorscheme molokai
 "colorscheme Wombat
 "colorscheme rdark
 
+" vimã®å†…éƒ¨æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’utf-8ã«è¨­å®š
+" set encoding=utf-8
+" ãƒ•ã‚¡ã‚¤ãƒ«æ›¸ãè¾¼ã¿æ™‚ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰(fileencoding)
+set fileencoding=utf-8
+" èª­ã¿è¾¼ã¿æ™‚ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰(fileencodings)
+set fileencodings=utf-8,cp932
 
 "noremap <silent> <C-t>:tablast <bar> tabnew<CR>
-" tab-t V‚µ‚¢ƒ^ƒu‚ğˆê”Ô‰E‚Éì‚é
+" tab-t æ–°ã—ã„ã‚¿ãƒ–ã‚’ä¸€ç•ªå³ã«ä½œã‚‹
 "noremap <silent> <C-w> :tabclose<CR>
-" tab-w ƒ^ƒu‚ğ•Â‚¶‚é
+" tab-w ã‚¿ãƒ–ã‚’é–‰ã˜ã‚‹
 noremap <silent> <C-tab> :tabnext<CR>
-" ctrl-tab Ÿ‚Ìƒ^ƒu
+" ctrl-tab æ¬¡ã®ã‚¿ãƒ–
 noremap <silent> <C-S-tab> :tabprevious<CR>
-" shift-ctrl-tab ‘O‚Ìƒ^ƒu
+" shift-ctrl-tab å‰ã®ã‚¿ãƒ–
 
 if has('win32')
         set guifont=MS_Gothic:h12:cSHIFTJIS
@@ -27,11 +33,11 @@ elseif has('unix')
         set guifont=DejaVu\ Sans\ Mono\ 12
 endif
 
-" ƒEƒCƒ“ƒhƒE‚Ì•
+" ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®å¹…
 " set columns=
-" ƒEƒCƒ“ƒhƒE‚Ì‚‚³
+" ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®é«˜ã•
 " set lines=
-" ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Ì‚‚³(GUIg—p)
+" ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®é«˜ã•(GUIä½¿ç”¨æ™‚)
 set cmdheight=2
-" gvim‹N“®‘S‰æ–Ê
+" gvimèµ·å‹•æ™‚å…¨ç”»é¢
 au GUIEnter * simalt ~x
