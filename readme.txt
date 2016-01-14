@@ -1,1 +1,2 @@
-りーどみー
+windows用_vimrc&_gvimrc
+mac or linuxの場合は、_gvimrcの画面サイズ設定+フォント設定を書き換える
