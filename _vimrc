@@ -285,6 +285,13 @@ NeoBundleLazy 'kchmck/vim-coffee-script',{
             \ "filetypes": ["coffee"],
             \ },
             \ }
+"txtファイル用のsyntax導入
+ NeoBundleLazy 'MU-lab/txt.vim', {
+             \ "autoload":{
+             \ "filetypes":["txt","text"],
+             \ },
+             \ }
+autocmd FileType text setl syntax=txt
 
 "PowerShell編集用
 NeoBundleLazy 'PProvost/vim-ps1',{
@@ -402,9 +409,6 @@ autocmd FileType tex,latex setlocal tabstop=2 shiftwidth=2 softtabstop=2
 set fileencoding=utf-8
 " 読み込み時の文字コード(fileencodings)
 set fileencodings=utf-8,cp932
-
-" txtファイル用のsyntax設定
-autocmd FileType text setl syntax=txt
 
 "spell設定
 "set spell
