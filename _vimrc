@@ -1,11 +1,4 @@
 "NeoBundle設定
-set t_Co=256
-"colorscheme default
-colorscheme desert
-" colorscheme industry
-" colorscheme elflord
-" colorscheme wombat
-" colorscheme rdark
 
 " 無題のファイルをfiletype=text扱い
 set filetype=text
@@ -47,6 +40,7 @@ au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
 """"""""""""""""""""""""""""""
 
+" 非同期実行
 NeoBundle 'Shougo/vimproc.vim',{
             \ "build": {
             \   "windows"   : "mingw32-make -f make_mingw64.mak",
@@ -109,8 +103,9 @@ endfunction
 "クラスや関数名の一覧を表示
 NeoBundleLazy 'Shougo/unite-outline',{
             \ "autoload": {
-            \   "unite_sources": ["outline"]
-            \}}
+            \   "unite_sources": ["outline"],
+            \ },
+            \ }
 "スニペット機能
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
@@ -218,6 +213,9 @@ NeoBundleLazy 'majutsushi/tagbar', {
             \ }}
 nmap <Leader>t :TagbarToggle<CR>
 
+" ステータスライン表示強化
+NeoBundle 'itchyny/lightline.vim'
+
 " 行末の半角スペースを可視化
 " NeoBundle 'bronson/vim-trailing-whitespace'
 
@@ -230,14 +228,102 @@ NeoBundleLazy 'thinca/vim-quickrun',{
 let g:quickrun_no_default_key_mappings = 1
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : '\<C-c>'
 nnoremap <A-r> :QuickRun<CR>
-let s:hooks = neobundle#get_hooks("vim-quickrun")
+let g:quickrun_config = {
+            \ '*': {"runner": 'remote/vimproc'},
+            \ '_' : {
+            \ 'outputter' : 'multi:buffer:quickfix',
+            \ 'outputter/buffer/split' : ':botright 60vsp',
+            \}}
+
+" " texファイルをコンパイル
+" function! s:StartTexFile()
+"     " LaTeX Quickrun
+"     let g:quickrun_config = {
+"                 \ '_' : {
+"                 \ 'outputter' : 'multi:buffer:quickfix',
+"                 \ 'outputter/buffer/split' : ':botright 8sp',
+"                 \   }
+"                 \}
+"     let g:quickrun_config['tex'] = {
+"                 \ 'command' : 'latexmk',
+"                 \ 'outputter' : 'error',
+"                 \ 'outputter/error/error' : 'quickfix',
+"                 \ 'srcfile' : expand("%"),
+"                 \ 'cmdopt': '-pdfdvi',
+"                 \ 'exec': ['%c %o %s'],
+"                 \}
+"     " 部分的に選択してコンパイル
+"     " http://auewe.hatenablog.com/entry/2013/12/25/033416 を参考に
+"     let g:quickrun_config.tmptex = {
+"                 \   'exec': [
+"                 \           'mv %s %a/tmptex.latex',
+"                 \           'latexmk -pdfdvi -pv -output-directory=%a %a/tmptex.latex',
+"                 \           ],
+"                 \   'args' : expand("%:p:h:gs?\\\\?/?"),
+"                 \   'outputter' : 'error',
+"                 \   'outputter/error/error' : 'quickfix',
+"                 \
+"                 \   'hook/eval/enable' : 1,
+"                 \   'hook/eval/cd' : "%s:r",
+"                 \
+"                 \   'hook/eval/template' : '\documentclass{jsarticle}'
+"                 \                         .'\usepackage[dvipdfmx]{graphicx, hyperref}'
+"                 \                         .'\usepackage{float}'
+"                 \                         .'\usepackage{amsmath,amssymb,amsthm,ascmac,mathrsfs}'
+"                 \                         .'\allowdisplaybreaks[1]'
+"                 \                         .'\theoremstyle{definition}'
+"                 \                         .'\newtheorem{theorem}{定理}'
+"                 \                         .'\newtheorem*{theorem*}{定理}'
+"                 \                         .'\newtheorem{definition}[theorem]{定義}'
+"                 \                         .'\newtheorem*{definition*}{定義}'
+"                 \                         .'\renewcommand\vector[1]{\mbox{\boldmath{\$#1\$}}}'
+"                 \                         .'\begin{document}'
+"                 \                         .'%s'
+"                 \                         .'\end{document}',
+"                 \
+"                 \   'hook/sweep/files' : [
+"                 \                        '%a/tmptex.latex',
+"                 \                        '%a/tmptex.out',
+"                 \                        '%a/tmptex.fdb_latexmk',
+"                 \                        '%a/tmptex.log',
+"                 \                        '%a/tmptex.aux',
+"                 \                        '%a/tmptex.dvi'
+"                 \                        ],
+"                 \}
+"     vnoremap <silent><buffer> <A-r> :QuickRun -mode v -type tmptex<CR>
+" endfunction
+" function! s:texPDFView()
+"     let texFileName = expand("%:r").'.pdf'
+"     let cmdPDFView = 'C:/"Program Files"/SumatraPDF/SumatraPDF.exe -reuse-instance '.texFileName
+"     echo vimproc#cmd#system(cmdPDFView)
+" endfunction
+" autocmd FileType tex call <SID>StartTexFile()
+" autocmd FileType tex nnoremap <Leader>v :call <SID>texPDFView()<CR>
+
+" tex編集用
+NeoBundleLazy 'vim-latex/vim-latex',{
+            \ 'autoload':{
+            \ 'filetypes':['tex','latex'],
+            \},
+            \}
+let s:hooks = neobundle#get_hooks("vim-latex")
 function! s:hooks.on_source(bundle)
-    let g:quickrun_config = {
-                \ '*': {"runner": 'remote/vimproc'},
-                \ '_' : {
-                \ 'outputter' : 'multi:buffer:quickfix',
-                \ 'outputter/buffer/split' : ':botright 60vsp',
-                \}}
+    set shellslash
+    set grepprg=grep\ -nH\ $*
+    let g:tex_flavor='latex'
+    let g:Imap_UsePlaceHolders = 1
+    let g:Imap_DeleteEmptyPlaceHolders = 1
+    let g:Imap_StickyPlaceHolders = 0
+    let g:Tex_DefaultTargetFormat = 'pdf'
+    let g:Tex_MultipleCompileFormats='dvi,pdf'
+    let g:Tex_FormatDependency_pdf = 'dvi,pdf'
+    let g:Tex_FormatDependency_ps = 'dvi,ps'
+    let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot "-kanji=utf-8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
+    let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+    let g:Tex_CompileRule_dvi = 'uplatex -kanji=utf-8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+    let g:Tex_BibtexFlavor = 'pbibtex'
+    let g:Tex_MakeIndexFlavor = 'pmendex $*.idx'
+    let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL SumatraPDF -reuse-instance -inverse-search "\"' . $VIM . '\gvim.exe\" -n -c \":RemoteOpen +\%l \%f\""'
 endfunction
 
 "html編集用
@@ -256,9 +342,9 @@ let g:user_emmet_settings = {
             \ },
             \ 'php' : {
             \   'extends' : 'html',
-            \   'filters' : 'html',
+            \   'filters' : ['c','html'],
             \ },
-            \}
+            \ }
 augroup EmmitVim
     autocmd!
     autocmd FileType * let g:user_emmet_settings.indentation = '               '[:&tabstop]
@@ -269,7 +355,18 @@ augroup VimCSS3Syntax
     autocmd FileType css setlocal iskeyword+=-
 augroup END
 
-"css、java-script、coffee-scriptシンタックス表示
+" html5文法チェック
+NeoBundleLazy 'hokaccha/vim-html5validator',{
+            \ "autoload": {
+            \ "filetypes": ["html"],
+            \ },
+            \ }
+
+" カラースキーム読み込み
+NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'tomasr/molokai'
+
+"css3、java-script、coffee-script、html5シンタックス表示
 NeoBundleLazy 'hail2u/vim-css3-syntax',{
             \ "autoload": {
             \ "filetypes": ["css"],
@@ -285,6 +382,11 @@ NeoBundleLazy 'kchmck/vim-coffee-script',{
             \ "filetypes": ["coffee"],
             \ },
             \ }
+NeoBundleLazy 'othree/html5.vim',{
+            \ 'autoload':{
+            \ 'filetypes':['html'],
+            \},
+            \}
 "txtファイル用のsyntax導入
  NeoBundleLazy 'MU-lab/txt.vim', {
              \ "autoload":{
@@ -292,6 +394,10 @@ NeoBundleLazy 'kchmck/vim-coffee-script',{
              \ },
              \ }
 autocmd FileType text setl syntax=txt
+
+"PHITSのsyntax表示
+NeoBundle 'JeanMichelBot/phits.vim'
+au BufRead,BufNewFile *.inp,*.ou' set filetype=phits
 
 "PowerShell編集用
 NeoBundleLazy 'PProvost/vim-ps1',{
@@ -350,8 +456,14 @@ if has('syntax')
     call ZenkakuSpace()
 endif
 
-"PHITSのsyntax表示
-au BufRead,BufNewFile *.inp,*.out set filetype=phits
+set t_Co=256
+"colorscheme default
+colorscheme desert
+" colorscheme industry
+" colorscheme elflord
+" colorscheme wombat
+" colorscheme rdark
+
 "Matlab用の設定
 autocmd BufEnter *.m    compiler mlint
 au FileType matlab map <buffer> <silent> <F5> :w<CR>:!matlab -nodesktop -nospalsh -r "try, run(which('%')), pause, end, quit" <CR>\\|<ESC><ESC>
