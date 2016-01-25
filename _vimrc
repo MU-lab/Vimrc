@@ -121,7 +121,7 @@ NeoBundleLazy 'Shougo/vimfiler.vim',{
             \"commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
             \"mappings": ['<Plug>(vimfiler_switch)'],
             \"explorer": 1,}}
-"Vimfilerの設定
+" Vimfilerの設定
 nnoremap <silent> <C-\> :<C-u>VimFilerBufferDir -split -simple -winwidth=25 -toggle -no-quit<CR>
 
 " 置換機能の拡張
@@ -187,9 +187,9 @@ nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
 nmap <C-.> <Plug>(yankround-prev)
 nmap <C-,> <Plug>(yankround-next)
-"" 履歴取得数
+" 履歴取得数
 let g:yankround_max_history = 50
-""履歴一覧(kien/ctrlp.vim)
+" 履歴一覧(kien/ctrlp.vim)
 nnoremap <silent><Leader>y :<C-u>CtrlPYankRound<CR>
 
 " クリップボード共有
@@ -215,15 +215,31 @@ nmap <Leader>t :TagbarToggle<CR>
 
 " ステータスライン表示強化
 NeoBundle 'itchyny/lightline.vim'
+" ブラウザを起動(gsで検索、gxでURLに移動)
+NeoBundleLazy 'tyru/open-browser.vim',{
+            \ 'autoload':{
+            \ 'commands':['OpenBrowserSearch','OpenBrowserSmartSearch','<Plug>(openbrowser-smart-search)'],
+            \ },}
+let s:hooks = neobundle#get_hooks("open-browser.vim")
+function! s:hooks.on_source(bundle)
+    let g:netrw_nogx = 1 " disable netrw's gx mapping.
+    nnoremap gs :OpenBrowserSearch <C-r><C-w><CR>
+    vnoremap gs y:OpenBrowserSearch <C-r>"<CR>
+    nnoremap gx <Plug>(openbrowser-smart-search)
+    vnoremap gx y:OpenBrowserSmartSearch <C-r>"<CR>
+endfunction
+nnoremap gs :OpenBrowserSearch <C-r><C-w><CR>
+vnoremap gs y:OpenBrowserSearch <C-r>"<CR>
+nnoremap gx <Plug>(openbrowser-smart-search)
+vnoremap gx y:OpenBrowserSmartSearch <C-r>"<CR>
 
 " 行末の半角スペースを可視化
-" NeoBundle 'bronson/vim-trailing-whitespace'
-
-"プログラムを簡易実行
+NeoBundle 'bronson/vim-trailing-whitespace'
+" プログラムを簡易実行
 NeoBundleLazy 'thinca/vim-quickrun',{
             \'autoload':{
             \   'commands': ['QuickRun']
-            \ }}
+            \ },}
 "quickrun設定
 let g:quickrun_no_default_key_mappings = 1
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : '\<C-c>'
@@ -300,6 +316,31 @@ let g:quickrun_config = {
 " autocmd FileType tex call <SID>StartTexFile()
 " autocmd FileType tex nnoremap <Leader>v :call <SID>texPDFView()<CR>
 
+"Python編集用
+"ローカル変数をハイライト
+NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim',{
+            \ "autoload": {
+            \ "filetypes": ["python","python3"],
+            \ },
+            \}
+"Python用補完
+NeoBundleLazy 'davidhalter/jedi-vim',{
+            \ "autoload": {
+            \ "filetypes": ["python","python3","djangohtml"],
+            \ },
+            \ }
+" jedi-vim設定
+let s:hooks = neobundle#get_hooks("jedi-vim")
+function! s:hooks.on_source(bundle)
+    autocmd FileType python setlocal omnifunc=jedi#completions
+    let g:jedi#completions_enabled = 0
+    let g:jedi#auto_vim_configuration = 0
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
+endfunction
+
 " tex編集用
 NeoBundleLazy 'vim-latex/vim-latex',{
             \ 'autoload':{
@@ -328,7 +369,12 @@ endfunction
 
 "html編集用
 "ZenCoding適用
-NeoBundle 'mattn/emmet-vim'
+NeoBundleLazy 'mattn/emmet-vim', {
+            \ 'autoload' : {
+            \   'filetypes' : ['html', 'html5', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
+            \   'commands' : ['<Plug>ZenCodingExpandNormal']
+            \ },}
+
 let g:user_emmet_mode = 'i'
 let g:user_emmet_leader_key = '<tab>'
 let g:use_emmet_complete_tag = 1
@@ -388,7 +434,7 @@ NeoBundleLazy 'othree/html5.vim',{
             \},
             \}
 "txtファイル用のsyntax導入
- NeoBundleLazy 'MU-lab/txt.vim', {
+NeoBundleLazy 'MU-lab/txt.vim', {
              \ "autoload":{
              \ "filetypes":["txt","text"],
              \ },
@@ -407,32 +453,6 @@ NeoBundleLazy 'PProvost/vim-ps1',{
             \}
 "自動で閉じカッコ挿入
 NeoBundle 'Townk/vim-autoclose'
-
-"Python編集用
-"ローカル変数をハイライト
-NeoBundleLazy 'hachibeeDI/python_hl_lvar.vim',{
-            \ "autoload": {
-            \ "filetypes": ["python","python3"],
-            \ },
-            \}
-"関数やクラスをテキストオブジェクト化
-"Python用補完
-NeoBundleLazy 'davidhalter/jedi-vim',{
-            \ "autoload": {
-            \ "filetypes": ["python","python3","djangohtml"],
-            \ },
-            \ }
-" jedi-vim設定
-let s:hooks = neobundle#get_hooks("jedi-vim")
-function! s:hooks.on_source(bundle)
-    autocmd FileType python setlocal omnifunc=jedi#completions
-    let g:jedi#completions_enabled = 0
-    let g:jedi#auto_vim_configuration = 0
-    if !exists('g:neocomplete#force_omni_input_patterns')
-        let g:neocomplete#force_omni_input_patterns = {}
-    endif
-    let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
-endfunction
 
 filetype plugin indent on       " restore filetype
 filetype indent on
@@ -484,11 +504,11 @@ set t_vb=
 set noerrorbells
 set visualbell
 
-" Shift + 矢印でウィンドウサイズを変更
-nnoremap <S-Left>  <C-w><<CR>
-nnoremap <S-Right> <C-w>><CR>
-nnoremap <S-Up>    <C-w>-<CR>
-nnoremap <S-Down>  <C-w>+<CR>
+" " Shift + 矢印でウィンドウサイズを変更
+" nnoremap <S-Left>  <C-w><<CR>
+" nnoremap <S-Right> <C-w>><CR>
+" nnoremap <S-Up>    <C-w>-<CR>
+" nnoremap <S-Down>  <C-w>+<CR>
 
 " Ctrl + hjkl でウィンドウ間を移動
 " nnoremap <C-h> <C-w>h
@@ -563,6 +583,10 @@ set wildmenu
 set laststatus=2
 " コマンドバーの高さ設定
 set cmdheight=2
+" <ctrl-a>、<ctrl-x>でインクリメント、デクリメント
+vunmap <C-x>
+vnoremap <C-a> <C-a>gv
+vnoremap <C-x> <C-x>gv
 " defaultのshellをPowerShellに設定
 " if !has('unix')
 "     set shell=powershell.exe
@@ -574,11 +598,11 @@ set cmdheight=2
 "%で対応箇所へ移動
 source $VIMRUNTIME/macros/matchit.vim
 
+" タブ設定
 " Anywhere SID.
 function! s:SID_PREFIX()
     return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
-
 " Set tabline.
 function! s:my_tabline()  "{{{
     let s = ''
@@ -610,7 +634,8 @@ for n in range(1, 9)
     execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
 endfor
 " t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
-noremap  [Tag]c :tablast <bar> tabnew
+" noremap  [Tag]c :tablast <bar> tabnew
+noremap  [Tag]c :VimFilerTab<CR>
 " tc 新しいタブを一番右に作る
 noremap <silent> [Tag]x :tabclose<CR>
 " tx タブを閉じる
