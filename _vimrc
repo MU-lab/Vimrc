@@ -189,11 +189,13 @@ nmap <C-.> <Plug>(yankround-prev)
 nmap <C-,> <Plug>(yankround-next)
 " 履歴取得数
 let g:yankround_max_history = 50
+" 貼り付けた部分をハイライト
+let g:yankround_use_region_hl = 1
 " 履歴一覧(kien/ctrlp.vim)
 nnoremap <silent><Leader>y :<C-u>CtrlPYankRound<CR>
-
 " クリップボード共有
 set clipboard+=unnamedplus,unnamed
+" set clipboard=
 
 "コメントアウト設定
 NeoBundle 'tomtom/tcomment_vim'
@@ -587,6 +589,12 @@ set cmdheight=2
 vunmap <C-x>
 vnoremap <C-a> <C-a>gv
 vnoremap <C-x> <C-x>gv
+" インデント、インデント解除の設定
+vnoremap > >gv
+vnoremap < <gv
+nnoremap > v>
+nnoremap < v<
+
 " defaultのshellをPowerShellに設定
 " if !has('unix')
 "     set shell=powershell.exe
