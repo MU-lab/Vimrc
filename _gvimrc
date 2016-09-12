@@ -11,13 +11,6 @@ colorscheme hybrid
 "colorscheme Wombat
 "colorscheme rdark
 
-" vimの内部文字コードをutf-8に設定
-" set encoding=utf-8
-" ファイル書き込み時の文字コード(fileencoding)
-set fileencoding=utf-8
-" 読み込み時の文字コード(fileencodings)
-set fileencodings=utf-8,cp932
-
 "noremap <silent> <C-t>:tablast <bar> tabnew<CR>
 " tab-t 新しいタブを一番右に作る
 "noremap <silent> <C-w> :tabclose<CR>
