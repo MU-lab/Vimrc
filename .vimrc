@@ -434,8 +434,7 @@ set wrapscan "最後尾まで検索を終えたら次の検索で先頭に移る
 set showcmd "入力中のコマンドを表示
 "set gdefault "置換の時 g オプションをデフォルトで有効にする
 set list "不可視文字を表示
-" set encoding=cp932 " vimの内部文字コードをutf-8に設定
-set encoding=utf-8 " vimの内部文字コードをutf-8に設定
+set encoding=cp932 " vimの内部文字コードをcp932に設定
 set fileencoding=utf-8 " ファイル書き込み時の文字コード(fileencoding)
 set fileformat=unix " ファイル書き込み時の改行コード(fileformat)
 set fileencodings=utf-8,utf-16,utf-16le,eucjp,cp932,sjis " 読み込み時の文字コード(fileencodings)
