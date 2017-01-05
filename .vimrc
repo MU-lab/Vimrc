@@ -27,7 +27,7 @@ let g:unite_enable_start_insert=1
 " バッファ一覧
 noremap <Space>b :Unite buffer<CR>
 " ファイル一覧
-noremap <Space>f :Unite -buffer-name=file file<CR>
+" noremap <Space>f :Unite -buffer-name=file file<CR>
 " 最近使ったファイルの一覧
 noremap <Space>m :Unite file_mru<CR>
 " sourcesを「今開いているファイルのディレクトリ」とする
@@ -110,7 +110,9 @@ NeoBundleLazy 'Shougo/vimfiler.vim',{
             \"mappings": ['<Plug>(vimfiler_switch)'],
             \"explorer": 1,}}
 " Vimfilerの設定
+let g:vimfiler_as_default_explorer = 1
 nnoremap <silent> <C-\> :<C-u>VimFilerBufferDir -split -simple -winwidth=25 -toggle -no-quit<CR>
+nnoremap <silent> <Space>f :<C-u>VimFilerBufferDir -split<CR>
 
 
 " 置換機能の拡張
@@ -120,7 +122,7 @@ nnoremap  <Leader>/ :OverCommandLine<CR>%s///g<Left><Left><Left>
 " 選択範囲を置換
 vnoremap  <Leader>/ :OverCommandLine<CR>s///g<Left><Left><Left>
 " カーソル下の単語をハイライト付きで置換
-nnoremap  <Leader>m :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left>
+nnoremap  <Space>/ :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left>
 " コピーした文字列をハイライト付きで置換
 " nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left>
 
@@ -171,23 +173,22 @@ NeoBundle 'vim-scripts/Align'
 "日本語への対応
 let g:Align_xstrlen = 3
 
-" ヤンク履歴を取得・再利用
-NeoBundle 'LeafCage/yankround.vim'
-NeoBundle 'kien/ctrlp.vim'
-" キーマップ
-nmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
-nmap , <Plug>(yankround-prev)
-nmap . <Plug>(yankround-next)
-" 履歴取得数
-let g:yankround_max_history = 50
-" 貼り付けた部分をハイライト
-let g:yankround_use_region_hl = 1
-" 履歴一覧(kien/ctrlp.vim)
-nnoremap <silent><Leader>y :<C-u>CtrlPYankRound<CR>
+" " ヤンク履歴を取得・再利用
+" NeoBundle 'LeafCage/yankround.vim'
+" NeoBundle 'kien/ctrlp.vim'
+" " キーマップ
+" nmap p <Plug>(yankround-p)
+" nmap P <Plug>(yankround-P)
+" nmap <A-p> <Plug>(yankround-prev)
+" nmap <A-n> <Plug>(yankround-next)
+" " 履歴取得数
+" let g:yankround_max_history = 50
+" " 貼り付けた部分をハイライト
+" let g:yankround_use_region_hl = 1
+" " 履歴一覧(kien/ctrlp.vim)
+" nnoremap <silent><Leader>y :<C-u>CtrlPYankRound<CR>
 " クリップボード共有
 set clipboard+=unnamedplus,unnamed
-"" set clipboard=
 
 "コメントアウト設定
 NeoBundle 'tomtom/tcomment_vim'
@@ -199,15 +200,6 @@ noremap <silent> <A-\>  :TComment<CR>
 "let g:tcommentMapLeader2 = '<Leader>\'  "        (default: '<Leader>_')
 "let g:tcommentMapLeaderOp1 = 'gc'      "  (default: 'gc')
 "let g:tcommentMapLeaderOp2 = 'gC'      "  (default: 'gC')
-
-
-" "Tagbarの表示
-" NeoBundleLazy 'majutsushi/tagbar', {
-"             \ "autoload": {
-"             \   "commands": ["TagbarToggle"],
-"             \ }}
-" nmap <Leader>t :TagbarToggle<CR>
-
 
 " ステータスライン表示強化
 NeoBundle 'itchyny/lightline.vim'
@@ -228,7 +220,6 @@ nnoremap gs :OpenBrowserSmartSearch <C-r><C-w><CR>
 vnoremap gs y:OpenBrowserSmartSearch <C-r>"<CR>
 nnoremap gx :OpenBrowser <C-r><C-w><CR>
 vnoremap gx y:OpenBrowser <C-r>"<CR>
-
 
 " 行末の半角スペースを可視化
 " NeoBundle 'bronson/vim-trailing-whitespace'
@@ -317,6 +308,8 @@ augroup END
 " カラースキーム読み込み
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'tomasr/molokai'
+NeoBundle 'gosukiwi/vim-atom-dark'
+NeoBundle 'geoffharcourt/one-dark.vim'
 
 
 "css3、java-script、coffee-script、html5シンタックス表示
@@ -389,20 +382,14 @@ endif
 
 
 set t_Co=256
-"colorscheme default
 colorscheme desert
-" colorscheme industry
-" colorscheme elflord
-" colorscheme wombat
-" colorscheme rdark
 
 ""Matlab用の設定
 "autocmd BufEnter *.m    compiler mlint
 "autocmd FileType matlab map <buffer> <silent> <F5> :w<CR>:!matlab -nodesktop -nospalsh -r "try, run(which('%')), pause, end, quit" <CR>\\|<ESC><ESC>
 "autocmd FileType matlab set foldmethod=syntax foldcolumn=2 foldlevel=33
 
-"行番号表示
-set number
+set number "行番号表示
 set splitbelow
 set splitright
 "grep時に自動でquickfixする
@@ -432,15 +419,20 @@ set ignorecase "大文字と小文字を区別しない
 set smartcase "大文字と小文字が混在した言葉で検索を行った場合に限り、大文字と小文字を区別する
 set wrapscan "最後尾まで検索を終えたら次の検索で先頭に移る
 set showcmd "入力中のコマンドを表示
+set nowrap "折り返しを無効
 "set gdefault "置換の時 g オプションをデフォルトで有効にする
 set list "不可視文字を表示
 set encoding=cp932 " vimの内部文字コードをcp932に設定
+" set encoding=utf-8 " vimの内部文字コードをcp932に設定
 set fileencoding=utf-8 " ファイル書き込み時の文字コード(fileencoding)
 set fileformat=unix " ファイル書き込み時の改行コード(fileformat)
 set fileencodings=utf-8,utf-16,utf-16le,eucjp,cp932,sjis " 読み込み時の文字コード(fileencodings)
 "set spell "spell設定
 set backspace=indent,eol,start " backspaceの有効化
+set cursorline "編集中行にライン表示
 
+" Qでex-modeに入らない
+nnoremap Q <Nop>
 
 " Ctrl + hjkl でウィンドウ間を移動
 " nnoremap <C-h> <C-w>h
@@ -525,35 +517,6 @@ autocmd FileType sass,scss,css setlocal tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType tex,latex setlocal smartindent cinwords=begin
 autocmd FileType tex,latex setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
-
-" タブ設定
-" Anywhere SID.
-function! s:SID_PREFIX()
-    return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-" Set tabline.
-function! s:my_tabline()  "{{{
-    let s = ''
-    for i in range(1, tabpagenr('$'))
-        let bufnrs = tabpagebuflist(i)
-        let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-        let no = i  " display 0-origin tabpagenr.
-        let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-        let title = fnamemodify(bufname(bufnr), ':t')
-        let title = '[' . title . ']'
-        let s .= '%'.i.'T'
-        let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-        let s .= no . ':' . title
-        let s .= mod
-        let s .= '%#TabLineFill# '
-    endfor
-    let s .= '%#TabLineFill#%T%=%#TabLine#'
-    return s
-endfunction "}}}
-let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
-"set showtabline=2 " 常にタブラインを表示
-
-
 "diff差分表示
 function! s:vimdiff_in_newtab(...)
   if a:0 == 1
@@ -562,21 +525,3 @@ function! s:vimdiff_in_newtab(...)
 endfunction
 command! -bar -nargs=+ -complete=file Diff  call s:vimdiff_in_newtab(<f-args>)
 
-" The prefix key.
-nnoremap    [Tag]   <Nop>
-nmap    t [Tag]
-
-" Tab jump
-for n in range(1, 9)
-    execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
-endfor
-" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
-" noremap  [Tag]c :tablast <bar> tabnew
-noremap  [Tag]c :VimFilerTab<CR>
-" tc 新しいタブを一番右に作る
-noremap <silent> [Tag]x :tabclose<CR>
-" tx タブを閉じる
-noremap <silent> [Tag]n :tabnext<CR>
-" tn 次のタブ
-noremap <silent> [Tag]p :tabprevious<CR>
-" tp 前のタブ
