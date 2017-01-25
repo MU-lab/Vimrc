@@ -84,7 +84,7 @@ function! s:hooks.on_source(bundle)
     " Close popup by <Space>.
     "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 endfunction
-" autocmd FileType python setlocal omnifunc=python3complete#Complete
+autocmd FileType python setlocal omnifunc=python3complete#Complete
 
 
 "クラスや関数名の一覧を表示
@@ -242,32 +242,32 @@ let g:quickrun_config = {
 
 "Python編集用
 "Python用補完
-NeoBundle 'davidhalter/jedi-vim'
-" jedi-vim設定
-let g:jedi#auto_initialization = 0
-let g:jedi#auto_vim_configuration = 0
-" nnoremap [jedi] <Nop>
-" xnoremap [jedi] <Nop>
-" nmap <Leader>j [jedi]
-" xmap <Leader>j [jedi]
-let g:jedi#completions_command = "<C-Space>"    " 補完キーの設定この場合はCtrl+Space
-let g:jedi#goto_assignments_command = "<Leader>g"   " 変数の宣言場所へジャンプ（Ctrl + g)
-let g:jedi#goto_definitions_command = "<Leader>d"   " クラス、関数定義にジャンプ（Ctrl + d）
-let g:jedi#documentation_command = "<C-k>"      " Pydocを表示（Ctrl + k）
-" let g:jedi#rename_command = "[jedi]r"
-" let g:jedi#usages_command = "[jedi]n"
-let g:jedi#popup_select_first = 0
-let g:jedi#popup_on_dot = 0
-autocmd FileType python setlocal completeopt-=preview
-" for w/ neocomplete
-autocmd FileType python setlocal omnifunc=jedi#completions
-let g:jedi#completions_enabled = 1
-let g:jedi#auto_vim_configuration = 0
-if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
+" NeoBundle 'davidhalter/jedi-vim'
+" " jedi-vim設定
+" let g:jedi#auto_initialization = 0
+" let g:jedi#auto_vim_configuration = 0
+" " nnoremap [jedi] <Nop>
+" " xnoremap [jedi] <Nop>
+" " nmap <Leader>j [jedi]
+" " xmap <Leader>j [jedi]
+" let g:jedi#completions_command = "<C-Space>"    " 補完キーの設定この場合はCtrl+Space
+" let g:jedi#goto_assignments_command = "<Leader>g"   " 変数の宣言場所へジャンプ（Ctrl + g)
+" let g:jedi#goto_definitions_command = "<Leader>d"   " クラス、関数定義にジャンプ（Ctrl + d）
+" let g:jedi#documentation_command = "<C-k>"      " Pydocを表示（Ctrl + k）
+" " let g:jedi#rename_command = "[jedi]r"
+" " let g:jedi#usages_command = "[jedi]n"
+" let g:jedi#popup_select_first = 0
+" let g:jedi#popup_on_dot = 0
+" autocmd FileType python setlocal completeopt-=preview
+" " for w/ neocomplete
+" autocmd FileType python setlocal omnifunc=jedi#completions
+" let g:jedi#completions_enabled = 1
+" let g:jedi#auto_vim_configuration = 0
+" if !exists('g:neocomplete#force_omni_input_patterns')
+"     let g:neocomplete#force_omni_input_patterns = {}
+" endif
+" let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+"
 
 "html編集用
 "ZenCoding適用
@@ -313,32 +313,12 @@ NeoBundle 'geoffharcourt/one-dark.vim'
 
 
 "css3、java-script、coffee-script、html5シンタックス表示
-NeoBundleLazy 'hail2u/vim-css3-syntax',{
-            \ "autoload": {
-            \ "filetypes": ["css"],
-            \ },
-            \ }
-NeoBundleLazy 'jelera/vim-javascript-syntax',{
-            \ "autoload": {
-            \ "filetypes": ["js"],
-            \ },
-            \ }
-NeoBundleLazy 'kchmck/vim-coffee-script',{
-            \ "autoload": {
-            \ "filetypes": ["coffee"],
-            \ },
-            \ }
-NeoBundleLazy 'othree/html5.vim',{
-            \ 'autoload':{
-            \ 'filetypes':['html'],
-            \},
-            \}
+NeoBundle 'hail2u/vim-css3-syntax'
+NeoBundle 'jelera/vim-javascript-syntax'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'othree/html5.vim'
 "txtファイル用のsyntax導入
-NeoBundleLazy 'MU-lab/txt.vim', {
-             \ "autoload":{
-             \ "filetypes":["txt","text"],
-             \ },
-             \ }
+NeoBundleLazy 'MU-lab/txt.vim'
 autocmd FileType text setl syntax=txt
 
 "PHITSのsyntax表示
@@ -366,23 +346,22 @@ filetype plugin indent on       " restore filetype
 
 " 全角スペースの表示
 """"""""""""""""""""""""""""""
-function! ZenkakuSpace()
-    highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
-endfunction
-
-
-if has('syntax')
-    augroup ZenkakuSpace
-        autocmd!
-        autocmd ColorScheme * call ZenkakuSpace()
-        autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace', '　')
-    augroup END
-    call ZenkakuSpace()
-endif
+" function! ZenkakuSpace()
+"     highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
+" endfunction
+"
+"
+" if has('syntax')
+"     augroup ZenkakuSpace
+"         autocmd!
+"         autocmd ColorScheme * call ZenkakuSpace()
+"         autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace', '　')
+"     augroup END
+"     call ZenkakuSpace()
+" endif
 
 
 set t_Co=256
-colorscheme desert
 
 ""Matlab用の設定
 "autocmd BufEnter *.m    compiler mlint
