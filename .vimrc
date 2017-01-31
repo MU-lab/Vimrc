@@ -1,11 +1,7 @@
-"
+scriptencoding utf-8
 " 無題のファイルをfiletype=text扱い
-"
 syntax on
 set filetype=text
-" filetype off
-" filetype plugin indent off
-
 
 """"""""""""""""""""""""NeoBundle設定""""""""""""""""""""""
 if has('vim_starting')
@@ -29,7 +25,7 @@ noremap <Space>b :Unite buffer<CR>
 " ファイル一覧
 " noremap <Space>f :Unite -buffer-name=file file<CR>
 " 最近使ったファイルの一覧
-noremap <Space>m :Unite file_mru<CR>
+" noremap <Space>m :Unite file_mru<CR>
 " sourcesを「今開いているファイルのディレクトリ」とする
 " cnoremap uff :<C-u>UniteWithBufferDir file -buffer-name=file
 " ウィンドウを分割して開く
@@ -41,6 +37,7 @@ autocmd FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('
 " ESCキーを2回押すと終了する
 autocmd FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 autocmd FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+" NeoBundle 'Shougo/neomru.vim'
 
 " 非同期実行
 NeoBundle 'Shougo/vimproc.vim',{
@@ -52,11 +49,10 @@ NeoBundle 'Shougo/vimproc.vim',{
             \ }}
 
 
-NeoBundle 'Shougo/neomru.vim'
 " neocomplete補完
-" NeoBundleLazy 'Shougo/neocomplete.vim', {
-"             \ "autoload": {"insert": 1}}
-NeoBundle 'Shougo/neocomplete.vim'
+NeoBundleLazy 'Shougo/neocomplete.vim', {
+            \ "autoload": {"insert": 1}}
+" NeoBundle 'Shougo/neocomplete.vim'
 let g:neocomplete#enable_at_startup = 1
 let s:hooks = neobundle#get_hooks("neocomplete.vim")
 function! s:hooks.on_source(bundle)
@@ -86,13 +82,6 @@ function! s:hooks.on_source(bundle)
 endfunction
 autocmd FileType python setlocal omnifunc=python3complete#Complete
 
-
-"クラスや関数名の一覧を表示
-" NeoBundleLazy 'h1mesuke/unite-outline',{
-"             \ "autoload": {
-"             \   "unite_sources": ["outline"],
-"             \ },
-"             \ }
 "スニペット機能
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/neosnippet-snippets'
@@ -146,49 +135,33 @@ function! s:hooks.on_source(bundle)
 endfunction
 
 " マルチカーソル設定
-NeoBundle 'terryma/vim-multiple-cursors'
-" Default mapping
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_next_key='<C-n>'
-let g:multi_cursor_prev_key='<C-p>'
-let g:multi_cursor_skip_key='<C-x>'
-let g:multi_cursor_quit_key='<Esc>'
-let g:multi_cursor_start_key='<C-n>'
-let g:multi_cursor_start_word_key='g<C-n>'
-" Called once right before you start selecting multiple cursors
-function! Multiple_cursors_before()
-  if exists(':NeoCompleteLock')==2
-    exe 'NeoCompleteLock'
-  endif
-endfunction
-" Called once only when the multiple selection is canceled (default <Esc>)
-function! Multiple_cursors_after()
-  if exists(':NeoCompleteUnlock')==2
-    exe 'NeoCompleteUnlock'
-  endif
-endfunction
+" NeoBundle 'terryma/vim-multiple-cursors'
+" " Default mapping
+" let g:multi_cursor_use_default_mapping=0
+" let g:multi_cursor_next_key='<C-n>'
+" let g:multi_cursor_prev_key='<C-p>'
+" let g:multi_cursor_skip_key='<C-x>'
+" let g:multi_cursor_quit_key='<Esc>'
+" let g:multi_cursor_start_key='<C-n>'
+" let g:multi_cursor_start_word_key='g<C-n>'
+" " Called once right before you start selecting multiple cursors
+" function! Multiple_cursors_before()
+"   if exists(':NeoCompleteLock')==2
+"     exe 'NeoCompleteLock'
+"   endif
+" endfunction
+" " Called once only when the multiple selection is canceled (default <Esc>)
+" function! Multiple_cursors_after()
+"   if exists(':NeoCompleteUnlock')==2
+"     exe 'NeoCompleteUnlock'
+"   endif
+" endfunction
 
 "テキスト整形
 NeoBundle 'vim-scripts/Align'
 "日本語への対応
 let g:Align_xstrlen = 3
 
-" " ヤンク履歴を取得・再利用
-" NeoBundle 'LeafCage/yankround.vim'
-" NeoBundle 'kien/ctrlp.vim'
-" " キーマップ
-" nmap p <Plug>(yankround-p)
-" nmap P <Plug>(yankround-P)
-" nmap <A-p> <Plug>(yankround-prev)
-" nmap <A-n> <Plug>(yankround-next)
-" " 履歴取得数
-" let g:yankround_max_history = 50
-" " 貼り付けた部分をハイライト
-" let g:yankround_use_region_hl = 1
-" " 履歴一覧(kien/ctrlp.vim)
-" nnoremap <silent><Leader>y :<C-u>CtrlPYankRound<CR>
-" クリップボード共有
-set clipboard+=unnamedplus,unnamed
 
 "コメントアウト設定
 NeoBundle 'tomtom/tcomment_vim'
@@ -211,10 +184,6 @@ NeoBundleLazy 'tyru/open-browser.vim',{
 let s:hooks = neobundle#get_hooks("open-browser.vim")
 function! s:hooks.on_source(bundle)
     let g:netrw_nogx = 1 " disable netrw's gx mapping.
-    nnoremap gs :OpenBrowserSmartSearch <C-r><C-w><CR>
-    vnoremap gs y:OpenBrowserSmartSearch <C-r>"<CR>
-    nnoremap gx :OpenBrowser <C-r><C-w><CR>
-    vnoremap gx y:OpenBrowser <C-r>"<CR>
 endfunction
 nnoremap gs :OpenBrowserSmartSearch <C-r><C-w><CR>
 vnoremap gs y:OpenBrowserSmartSearch <C-r>"<CR>
@@ -238,7 +207,6 @@ let g:quickrun_config = {
             \ 'outputter' : 'multi:buffer:quickfix',
             \ 'outputter/buffer/split' : ':botright 60vsp',
             \}}
-
 
 "Python編集用
 "Python用補完
@@ -269,36 +237,34 @@ let g:quickrun_config = {
 " let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 "
 
-"html編集用
-"ZenCoding適用
-NeoBundleLazy 'mattn/emmet-vim', {
-            \ 'autoload' : {
-            \   'filetypes' : ['html', 'html5', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
-            \   'commands' : ['<Plug>ZenCodingExpandNormal']
-            \ },}
-
-
-let g:user_emmet_mode = 'i'
-let g:user_emmet_leader_key = '<tab>'
-let g:use_emmet_complete_tag = 1
-let g:user_emmet_settings = {
-            \ 'lang' : 'ja',
-            \ 'html' : {
-            \   'filters' : 'html',
-            \ },
-            \ 'css' : {
-            \   'filters' : 'fc',
-            \ },
-            \ 'php' : {
-            \   'extends' : 'html',
-            \   'filters' : ['c','html'],
-            \ },
-            \ }
-augroup EmmitVim
-    autocmd!
-    autocmd FileType * let g:user_emmet_settings.indentation = '               '[:&tabstop]
-augroup END
-
+" "html編集用
+" "ZenCoding適用
+" NeoBundleLazy 'mattn/emmet-vim', {
+"             \ 'autoload' : {
+"             \   'filetypes' : ['html', 'html5', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
+"             \   'commands' : ['<Plug>ZenCodingExpandNormal']
+"             \ },}
+"
+" let g:user_emmet_mode = 'i'
+" let g:user_emmet_leader_key = '<tab>'
+" let g:use_emmet_complete_tag = 1
+" let g:user_emmet_settings = {
+"             \ 'lang' : 'ja',
+"             \ 'html' : {
+"             \   'filters' : 'html',
+"             \ },
+"             \ 'css' : {
+"             \   'filters' : 'fc',
+"             \ },
+"             \ 'php' : {
+"             \   'extends' : 'html',
+"             \   'filters' : ['c','html'],
+"             \ },
+"             \ }
+" augroup EmmitVim
+"     autocmd!
+"     autocmd FileType * let g:user_emmet_settings.indentation = '               '[:&tabstop]
+" augroup END
 
 augroup VimCSS3Syntax
     autocmd!
@@ -311,27 +277,20 @@ NeoBundle 'tomasr/molokai'
 NeoBundle 'gosukiwi/vim-atom-dark'
 NeoBundle 'geoffharcourt/one-dark.vim'
 
-
 "css3、java-script、coffee-script、html5シンタックス表示
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'othree/html5.vim'
 "txtファイル用のsyntax導入
-NeoBundleLazy 'MU-lab/txt.vim'
+NeoBundle 'MU-lab/txt.vim'
 autocmd FileType text setl syntax=txt
 
 "PHITSのsyntax表示
 NeoBundle 'JeanMichelBot/phits.vim'
 " autocmd BufRead,BufNewFile *.inp,*.ou' set filetype=phits
-
-
 "PowerShell編集用
-NeoBundleLazy 'PProvost/vim-ps1',{
-            \ 'autoload': {
-            \ 'filetypes': ['ps1','ps1xml'],
-            \ },
-            \}
+NeoBundle 'PProvost/vim-ps1'
 "自動で閉じカッコ挿入
 NeoBundle 'Townk/vim-autoclose'
 
@@ -344,30 +303,7 @@ call neobundle#end()
 filetype plugin indent on       " restore filetype
 " filetype on
 
-" 全角スペースの表示
-""""""""""""""""""""""""""""""
-" function! ZenkakuSpace()
-"     highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
-" endfunction
-"
-"
-" if has('syntax')
-"     augroup ZenkakuSpace
-"         autocmd!
-"         autocmd ColorScheme * call ZenkakuSpace()
-"         autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace', '　')
-"     augroup END
-"     call ZenkakuSpace()
-" endif
-
-
 set t_Co=256
-
-""Matlab用の設定
-"autocmd BufEnter *.m    compiler mlint
-"autocmd FileType matlab map <buffer> <silent> <F5> :w<CR>:!matlab -nodesktop -nospalsh -r "try, run(which('%')), pause, end, quit" <CR>\\|<ESC><ESC>
-"autocmd FileType matlab set foldmethod=syntax foldcolumn=2 foldlevel=33
-
 set number "行番号表示
 set splitbelow
 set splitright
@@ -385,13 +321,6 @@ set t_vb=
 set noerrorbells
 set visualbell
 
-" " Shift + 矢印でウィンドウサイズを変更
-" nnoremap <S-Left>  <C-w><<CR>
-" nnoremap <S-Right> <C-w>><CR>
-" nnoremap <S-Up>    <C-w>-<CR>
-" nnoremap <S-Down>  <C-w>+<CR>
-
-
 set hlsearch "検索文字列をハイライトする
 set incsearch "インクリメンタルサーチを行う
 set ignorecase "大文字と小文字を区別しない
@@ -401,6 +330,7 @@ set showcmd "入力中のコマンドを表示
 set nowrap "折り返しを無効
 "set gdefault "置換の時 g オプションをデフォルトで有効にする
 set list "不可視文字を表示
+set listchars=tab:>-,extends:<,trail:-,eol:< " どの文字でタブや改行を表示するかを設定
 set encoding=cp932 " vimの内部文字コードをcp932に設定
 " set encoding=utf-8 " vimの内部文字コードをcp932に設定
 set fileencoding=utf-8 " ファイル書き込み時の文字コード(fileencoding)
@@ -409,15 +339,14 @@ set fileencodings=utf-8,utf-16,utf-16le,eucjp,cp932,sjis " 読み込み時の文
 "set spell "spell設定
 set backspace=indent,eol,start " backspaceの有効化
 set cursorline "編集中行にライン表示
+set showmatch " 括弧入力時に対応する括弧を表示 (noshowmatch:表示しない)
+set formatoptions+=mM " コマンドライン補完するときに強化されたものを使う(参照 :help wildmenu)
+set ruler " ルーラーを表示 (noruler:非表示)
+set title " タイトルを表示
+set clipboard+=unnamedplus,unnamed " クリップボード共有
 
 " Qでex-modeに入らない
 nnoremap Q <Nop>
-
-" Ctrl + hjkl でウィンドウ間を移動
-" nnoremap <C-h> <C-w>h
-" nnoremap <C-j> <C-w>j
-" nnoremap <C-k> <C-w>k
-" nnoremap <C-l> <C-w>l
 
 "Ctrl + 左右で行頭、行尾へ移動
 nnoremap <C-Left>  0
@@ -464,6 +393,8 @@ set cmdheight=2
 set iminsert=1
 set imsearch=-1
 
+
+
 " <ctrl-a>、<ctrl-x>でインクリメント、デクリメント
 "vunmap <C-x>
 vnoremap <C-a> <C-a>gv
@@ -476,7 +407,6 @@ nnoremap < v<
 
 "%で対応箇所へ移動
 source $VIMRUNTIME/macros/matchit.vim
-
 
 " インデント設定(デフォルト)
 set autoindent
@@ -497,10 +427,10 @@ autocmd FileType tex,latex setlocal smartindent cinwords=begin
 autocmd FileType tex,latex setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
 "diff差分表示
-function! s:vimdiff_in_newtab(...)
-  if a:0 == 1
-    exec 'vertical diffsplit ' . a:1
-  endif
-endfunction
-command! -bar -nargs=+ -complete=file Diff  call s:vimdiff_in_newtab(<f-args>)
+" function! s:vimdiff_in_newtab(...)
+"   if a:0 == 1
+"     exec 'vertical diffsplit ' . a:1
+"   endif
+" endfunction
+" command! -bar -nargs=+ -complete=file Diff  call s:vimdiff_in_newtab(<f-args>)
 

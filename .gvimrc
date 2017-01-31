@@ -3,7 +3,7 @@
 colorscheme atom-dark
 " colorscheme onedark
 " let g:onedark_termcolors=16
-set background=dark
+"set background=dark
 
 if has('win32')
         " set guifont=MS_Gothic:h12:cSHIFTJIS
