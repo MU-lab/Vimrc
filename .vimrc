@@ -134,29 +134,6 @@ function! s:hooks.on_source(bundle)
     let g:indent_guides_guide_size = 1
 endfunction
 
-" マルチカーソル設定
-" NeoBundle 'terryma/vim-multiple-cursors'
-" " Default mapping
-" let g:multi_cursor_use_default_mapping=0
-" let g:multi_cursor_next_key='<C-n>'
-" let g:multi_cursor_prev_key='<C-p>'
-" let g:multi_cursor_skip_key='<C-x>'
-" let g:multi_cursor_quit_key='<Esc>'
-" let g:multi_cursor_start_key='<C-n>'
-" let g:multi_cursor_start_word_key='g<C-n>'
-" " Called once right before you start selecting multiple cursors
-" function! Multiple_cursors_before()
-"   if exists(':NeoCompleteLock')==2
-"     exe 'NeoCompleteLock'
-"   endif
-" endfunction
-" " Called once only when the multiple selection is canceled (default <Esc>)
-" function! Multiple_cursors_after()
-"   if exists(':NeoCompleteUnlock')==2
-"     exe 'NeoCompleteUnlock'
-"   endif
-" endfunction
-
 "テキスト整形
 NeoBundle 'vim-scripts/Align'
 "日本語への対応
@@ -307,6 +284,7 @@ set t_Co=256
 set number "行番号表示
 set splitbelow
 set splitright
+colorscheme atom-dark
 "grep時に自動でquickfixする
 autocmd QuickFixCmdPost *grep* cwindow
 "折り返し行中の上下移動有効化
@@ -330,7 +308,8 @@ set showcmd "入力中のコマンドを表示
 set nowrap "折り返しを無効
 "set gdefault "置換の時 g オプションをデフォルトで有効にする
 set list "不可視文字を表示
-set listchars=tab:>-,extends:<,trail:-,eol:< " どの文字でタブや改行を表示するかを設定
+set listchars=tab:<-,extends:<,eol:< " どの文字でタブや改行を表示するかを設定
+" set listchars=tab:>-,extends:<,trail:-,eol:< " どの文字でタブや改行を表示するかを設定
 set encoding=cp932 " vimの内部文字コードをcp932に設定
 " set encoding=utf-8 " vimの内部文字コードをcp932に設定
 set fileencoding=utf-8 " ファイル書き込み時の文字コード(fileencoding)
@@ -426,11 +405,11 @@ autocmd FileType sass,scss,css setlocal tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType tex,latex setlocal smartindent cinwords=begin
 autocmd FileType tex,latex setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
-"diff差分表示
-" function! s:vimdiff_in_newtab(...)
-"   if a:0 == 1
-"     exec 'vertical diffsplit ' . a:1
-"   endif
-" endfunction
-" command! -bar -nargs=+ -complete=file Diff  call s:vimdiff_in_newtab(<f-args>)
+" diff差分表示
+function! s:vimdiff_in_newtab(...)
+  if a:0 == 1
+    exec 'vertical diffsplit ' . a:1
+  endif
+endfunction
+command! -bar -nargs=+ -complete=file Diff  call s:vimdiff_in_newtab(<f-args>)
 
